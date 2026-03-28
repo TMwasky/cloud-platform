@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "infrastructure/**"
-  Workflow_dispatch:
 
 jobs:
   deploy-infra:
