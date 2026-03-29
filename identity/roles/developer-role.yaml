@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
+Parameters:
+  S3ReadOnlyPolicy:
+    Type: String
+    Description: Inline JSON for the S3 read-only policy
+
 Resources:
   DeveloperRole:
     Type: AWS::IAM::Role
@@ -12,12 +17,6 @@ Resources:
             Principal:
               AWS: "*"
             Action: sts:AssumeRole
-
-        Policies:
-          - PolicyName: S3ReadOnly
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: Allow
-                  Action: s3:GetOBject
-                  Resource: "*"
+      Policies:
+        - PolicyName: S3ReadOnly
+          PolicyDocument: !Ref S3ReadOnlyPolicy

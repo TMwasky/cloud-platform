@@ -35,6 +35,7 @@ jobs:
       - name: Deploy CloudFormation stack
         run: |
           aws cloudformation deploy \
-            --template-file infrastructure/app.yaml \
-            --stack-name safe-iac-demo-bucket \
-            --capabilities CAPABILITY_NAMED_IAM
+            --template-file identity/roles/developer-role.yaml \
+            --stack-name safe-developer-role \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides S3ReadOnlyPolicy="$(cat policies/s3-readonly.json)"
