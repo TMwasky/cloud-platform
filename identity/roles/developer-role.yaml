@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 Resources:
   DeveloperRole:
-    Type: AWS::IAM:Role
+    Type: AWS::IAM::Role
     Properties:
       RoleName: developer-role
       AssumeRolePolicyDocument:
@@ -10,5 +10,14 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:root
+              AWS: "*"
             Action: sts:AssumeRole
+
+        Policies:
+          - PolicyName: S3ReadOnly
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action: s3:GetOBject
+                  Resource: "*"
