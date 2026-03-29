@@ -1,5 +1,5 @@
 name: Get AWS Credentials
-
+# Testing Purposes
 on:
   push:
     branches:
