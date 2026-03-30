@@ -38,4 +38,4 @@ jobs:
             --template-file identity/roles/developer-role.yaml \
             --stack-name safe-developer-role \
             --capabilities CAPABILITY_NAMED_IAM \
-            --parameter-overrides S3ReadOnlyPolicy="$(cat policies/s3-readonly.json)"
+            --parameter-overrides S3ReadOnlyPolicy="$(cat identity/policies/s3-readonly.json)"
