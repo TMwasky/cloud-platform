@@ -37,4 +37,5 @@ jobs:
           aws cloudformation deploy \
             --template-file infrastructure/app.yaml \
             --stack-name safe-iac-demo-bucket \
-            --capabilities CAPABILITY_NAMED_IAM
+            --capabilities CAPABILITY_NAMED_IAM \
+            --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation

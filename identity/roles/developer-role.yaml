@@ -1,9 +1,21 @@
 AWSTemplateFormatVersion: "2010-09-09"
 # Testing
+AWSTemplateFormatVersion: "2010-09-09"
+Description: S3 bucket + Lambda
+
 Parameters:
   S3ReadOnlyPolicy:
     Type: String
     Description: Inline JSON for the S3 read-only policy
+  Environment:
+    Type: String
+    Default: ent-it-staging
+  ProjectName:
+    Type: String
+    Default: safe-iac-demo
+  RegionControl:
+    Type: String
+    Default: us-east-1
 
 Resources:
   DeveloperRole:
@@ -17,6 +29,16 @@ Resources:
             Principal:
               AWS: "*"
             Action: sts:AssumeRole
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ProjectName
+          value: !Ref ProjectName
+        - Key: AWSService
+          Value: iam
+        - Key: RegionControl
+          value: !Ref RegionControl
+
       Policies:
         - PolicyName: S3ReadOnly
           PolicyDocument: !Ref S3ReadOnlyPolicy

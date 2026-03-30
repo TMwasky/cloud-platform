@@ -39,3 +39,4 @@ jobs:
             --stack-name safe-developer-role \
             --capabilities CAPABILITY_NAMED_IAM \
             --parameter-overrides S3ReadOnlyPolicy="$(cat identity/policies/s3-readonly.json)"
+            --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation

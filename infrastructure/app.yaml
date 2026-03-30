@@ -1,11 +1,31 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: S3 bucket + Lambda
+
+Parameters:
+  Environment:
+    Type: String
+    Default: ent-it-staging
+  ProjectName:
+    Type: String
+    Default: safe-iac-demo
+  RegionControl:
+    Type: String
+    Default: us-east-1
 #Testing
 Resources:
   AppBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: iac-s3-demo-bucket
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ProjectName
+          value: safe-iac-demo
+        - Key: AWSService
+          Value: s3
+        - Key: RegionControl
+          value: us-east-1
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -18,6 +38,16 @@ Resources:
             Principal:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ProjectName
+          value: safe-iac-demo
+        - Key: AWSService
+          Value: iam
+        - Key: RegionControl
+          value: us-east-1
+
       Policies:
         - PolicyName: lambda-logs
           PolicyDocument:
@@ -39,3 +69,12 @@ Resources:
         ZipFile: |
           def handler(event, context):
               return "Hello from Lambda"
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ProjectName
+          value: !Ref ProjectName
+        - Key: AWSService
+          Value: lambda
+        - Key: RegionControl
+          value: !Ref ProjectName
