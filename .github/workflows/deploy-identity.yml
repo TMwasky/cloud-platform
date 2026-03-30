@@ -37,4 +37,5 @@ jobs:
           aws cloudformation deploy \
             --template-file identity/roles/developer-role.yaml \
             --stack-name safe-developer-role \
-            --capabilities CAPABILITY_NAMED_IAM
+            --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides S3ReadOnlyPolicy="$(cat policies/s3-readonly.json)"
