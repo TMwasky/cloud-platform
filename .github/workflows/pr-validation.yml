@@ -23,6 +23,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Validate Policy Stack
+        run: |
+          aws cloudformation validate-template \
+            --template-body file://identity/policies/s3-readonly.yaml
+
       - name: Validate Identity Stack
         run: |
           aws cloudformation validate-template \

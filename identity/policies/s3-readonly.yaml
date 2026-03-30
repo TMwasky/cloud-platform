@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: S3 Read Only Policy for iac-s3-demo-bucket
+
+Parameters:
+  Environment:
+    Type: String
+    Default: ent-it-staging
+  ProjectName:
+    Type: String
+    Default: safe-iac-demo
+  RegionControl:
+    Type: String
+    Default: us-east-1
+
+Resources:
+  S3ReadOnlyPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: S3ReadOnlyPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: ListBucket
+            Effect: Allow
+            Action: s3:ListBucket
+            Resource: arn:aws:s3:::iac-s3-demo-bucket
+
+          - Sid: ObjectAccess
+            Effect: Allow
+            Action:
+              - s3:GetObject
+            Resource: arn:aws:s3:::iac-s3-demo-bucket/*
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ProjectName
+          Value: !Ref ProjectName
+        - Key: AWSService
+          Value: iam
+        - Key: RegionControl
+          Value: !Ref RegionControl
+
+Outputs:
+  PolicyArn:
+    Description: ARN of the S3 ReadOnly policy
+    Value: !Ref S3ReadOnlyPolicy
+    Export:
+      Name: S3ReadOnlyPolicyArn
