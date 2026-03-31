@@ -1,5 +1,6 @@
 name: Deploy Identity
 
+# Trigger workflow on push to main or manual trigger
 on:
   push:
     branches:
@@ -11,16 +12,18 @@ on:
       environment:
         description: "Environment to deploy"
         required: true
-        default: "ent-it-staging"
+        default: "dev"
 
 jobs:
   deploy-identity:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Configure AWS credentials from GitHub secrets
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -28,25 +31,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      # Deploy S3 Policy for Iam Role
       - name: Deploy S3 ReadOnly Policy stack
         run: |
-          # 1. Try the deploy
-          if ! aws cloudformation deploy \
+          aws cloudformation deploy \
             --template-file identity/policies/s3-readonly.yaml \
             --stack-name safe-s3-readonly-policy \
-            --capabilities CAPABILITY_NAMED_IAM; then
-            
-            echo "❌ Deployment Failed. Fetching the REAL error message..."
-            
-            # 2. Get the ID of the failed changeset
-            CS_ID=$(aws cloudformation list-change-sets --stack-name safe-s3-readonly-policy --query 'Summaries[0].ChangeSetId' --output text)
-            
-            # 3. Print the StatusReason (This is where the real error lives)
-            aws cloudformation describe-change-set --stack-name safe-s3-readonly-policy --change-set-name $CS_ID --query 'StatusReason' --output text
-            
-            exit 1
-          fi
+            --capabilities CAPABILITY_NAMED_IAM \
+            --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
 
+      # Deploy IAM roles CloudFormation
       - name: Deploy IAM roles stack
         run: |
           aws cloudformation deploy \
