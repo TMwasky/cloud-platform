@@ -1,23 +1,12 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: S3 Read Only Policy for iac-s3-demo-bucket
-
-Parameters:
-  Environment:
-    Type: String
-    Default: ent-it-staging
-  ProjectName:
-    Type: String
-    Default: safe-iac-demo
-  RegionControl:
-    Type: String
-    Default: us-east-1
+Description: Hardened S3 Policy for Debugging
 
 Resources:
   S3ReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      # 1. Unique Name: Avoids collisions and satisfies "naming standard" hooks
-      ManagedPolicyName: !Sub "${ProjectName}-${Environment}-s3-readonly-policy"
+      # Use a very specific, unique name to avoid collisions
+      ManagedPolicyName: "safe-iac-demo-staging-s3-readonly-v1"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -33,17 +22,6 @@ Resources:
             Resource: arn:aws:s3:::iac-s3-demo-bucket/*
       Tags:
         - Key: Environment
-          Value: !Ref Environment
+          Value: ent-it-staging
         - Key: ProjectName
-          Value: !Ref ProjectName
-        - Key: AWSService
-          Value: iam
-        - Key: RegionControl
-          Value: !Ref RegionControl
-
-Outputs:
-  PolicyArn:
-    Value: !Ref S3ReadOnlyPolicy
-    Export:
-      # 2. Dynamic Export: Matches the unique name logic
-      Name: !Sub "${ProjectName}-${Environment}-S3ReadOnlyPolicyArn"
+          Value: safe-iac-demo
