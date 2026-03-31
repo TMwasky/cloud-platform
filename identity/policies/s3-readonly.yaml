@@ -4,10 +4,13 @@ Description: S3 Read Only Policy for iac-s3-demo-bucket
 Parameters:
   Environment:
     Type: String
+    Default: ent-it-staging
   ProjectName:
     Type: String
+    Default: safe-iac-demo
   RegionControl:
     Type: String
+    Default: us-east-1
 
 Resources:
   S3ReadOnlyPolicy:
