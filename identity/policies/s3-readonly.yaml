@@ -4,19 +4,17 @@ Description: S3 Read Only Policy for iac-s3-demo-bucket
 Parameters:
   Environment:
     Type: String
-    Default: ent-it-staging
   ProjectName:
     Type: String
-    Default: safe-iac-demo
   RegionControl:
     Type: String
-    Default: us-east-1
 
 Resources:
   S3ReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      ManagedPolicyName: !Sub "${ProjectName}-S3ReadOnlyPolicy" # Added uniqueness to prevent naming collisions
+      # 1. Unique Name: Avoids collisions and satisfies "naming standard" hooks
+      ManagedPolicyName: !Sub "${ProjectName}-${Environment}-s3-readonly-policy"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -42,7 +40,7 @@ Resources:
 
 Outputs:
   PolicyArn:
-    Description: ARN of the S3 ReadOnly policy
     Value: !Ref S3ReadOnlyPolicy
     Export:
-      Name: !Sub "${AWS::StackName}-S3ReadOnlyPolicyArn"
+      # 2. Dynamic Export: Matches the unique name logic
+      Name: !Sub "${ProjectName}-${Environment}-S3ReadOnlyPolicyArn"
