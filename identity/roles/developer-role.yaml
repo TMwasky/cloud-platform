@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Developer Role
+Description: Developer Role with Secure Trust Policy and Dynamic Imports
 
 Parameters:
   Environment:
@@ -16,14 +16,22 @@ Resources:
   DeveloperRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: developer-role
+      # Using Sub here ensures the role name is unique to the project
+      RoleName: !Sub "${ProjectName}-developer-role"
+
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
-              AWS: "*"
+              # Dynamically pulls your current AWS Account ID
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
             Action: sts:AssumeRole
+
+      # Correctly nested under Properties
+      ManagedPolicyArns:
+        - Fn::ImportValue: !Sub "${ProjectName}-S3ReadOnlyPolicyArn"
+
       Tags:
         - Key: Environment
           Value: !Ref Environment
@@ -34,5 +42,7 @@ Resources:
         - Key: RegionControl
           Value: !Ref RegionControl
 
-      ManagedPolicyArns:
-        - !ImportValue S3ReadOnlyPolicyArn
+Outputs:
+  RoleArn:
+    Description: ARN of the newly created Developer Role
+    Value: !GetAtt DeveloperRole.Arn

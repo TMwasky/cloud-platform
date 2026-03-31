@@ -16,15 +16,15 @@ Resources:
   S3ReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      ManagedPolicyName: S3ReadOnlyPolicy
+      ManagedPolicyName: !Sub "${ProjectName}-S3ReadOnlyPolicy" # Added uniqueness to prevent naming collisions
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Sid: ListBucket
             Effect: Allow
-            Action: s3:ListBucket
+            Action:
+              - s3:ListBucket
             Resource: arn:aws:s3:::iac-s3-demo-bucket
-
           - Sid: ObjectAccess
             Effect: Allow
             Action:
@@ -45,4 +45,4 @@ Outputs:
     Description: ARN of the S3 ReadOnly policy
     Value: !Ref S3ReadOnlyPolicy
     Export:
-      Name: S3ReadOnlyPolicyArn
+      Name: !Sub "${AWS::StackName}-S3ReadOnlyPolicyArn"

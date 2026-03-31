@@ -1,6 +1,5 @@
 name: Deploy Identity
 
-# Trigger workflow on push to main or manual trigger
 on:
   push:
     branches:
@@ -12,18 +11,16 @@ on:
       environment:
         description: "Environment to deploy"
         required: true
-        default: "dev"
+        default: "ent-it-staging"
 
 jobs:
   deploy-identity:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Configure AWS credentials from GitHub secrets
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -37,6 +34,9 @@ jobs:
             --template-file identity/policies/s3-readonly.yaml \
             --stack-name safe-s3-readonly-policy \
             --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides \
+              ProjectName=safe-iac-demo \
+              Environment=ent-it-staging \
             --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
 
       - name: Deploy IAM roles stack
@@ -45,4 +45,7 @@ jobs:
             --template-file identity/roles/developer-role.yaml \
             --stack-name safe-developer-role \
             --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides \
+              ProjectName=safe-iac-demo \
+              Environment=ent-it-staging \
             --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
