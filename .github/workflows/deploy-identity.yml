@@ -28,22 +28,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy S3 ReadOnly Policy stack
-              run: |
-                aws cloudformation deploy \
-                  --template-file identity/policies/s3-readonly.yaml \
-                  --stack-name safe-s3-readonly-policy \
-                  --capabilities CAPABILITY_NAMED_IAM \
-                  --parameter-overrides \
-                    ProjectName=safe-iac-demo \
-                    Environment=ent-it-staging \
-                    RegionControl=us-east-1 \
-                  --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation || \
-                (aws cloudformation describe-change-set \
-                  --stack-name safe-s3-readonly-policy \
-                  --change-set-name $(aws cloudformation list-change-sets --stack-name safe-s3-readonly-policy --query 'Summaries[0].ChangeSetId' --output text) \
-                  --query 'StatusReason' --output text && exit 1)
-                  
       - name: Deploy IAM roles stack
         run: |
           aws cloudformation deploy \
