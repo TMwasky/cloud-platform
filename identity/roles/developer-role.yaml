@@ -4,10 +4,13 @@ Description: Developer Role synchronized with Dynamic Policy Export
 Parameters:
   Environment:
     Type: String
+    Default: ent-it-staging
   ProjectName:
     Type: String
+    Default: safe-iac-demo
   RegionControl:
     Type: String
+    Default: us-east-1
 
 Resources:
   DeveloperRole:
