@@ -37,6 +37,7 @@ jobs:
             --parameter-overrides \
               ProjectName=safe-iac-demo \
               Environment=ent-it-staging \
+              RegionControl=us-east-1 \
             --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
 
       - name: Deploy IAM roles stack
@@ -48,4 +49,5 @@ jobs:
             --parameter-overrides \
               ProjectName=safe-iac-demo \
               Environment=ent-it-staging \
+              RegionControl=us-east-1 \
             --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
