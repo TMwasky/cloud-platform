@@ -43,7 +43,7 @@ jobs:
                   --stack-name safe-s3-readonly-policy \
                   --change-set-name $(aws cloudformation list-change-sets --stack-name safe-s3-readonly-policy --query 'Summaries[0].ChangeSetId' --output text) \
                   --query 'StatusReason' --output text && exit 1)
-                  
+
       - name: Deploy IAM roles stack
         run: |
           aws cloudformation deploy \
