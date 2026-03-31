@@ -31,7 +31,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # Deploy S3 Policy for Iam Role
       - name: Deploy S3 ReadOnly Policy stack
         run: |
           aws cloudformation deploy \
@@ -40,7 +39,6 @@ jobs:
             --capabilities CAPABILITY_NAMED_IAM \
             --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
 
-      # Deploy IAM roles CloudFormation
       - name: Deploy IAM roles stack
         run: |
           aws cloudformation deploy \
