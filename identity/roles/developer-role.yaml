@@ -27,6 +27,10 @@ Resources:
               AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
             Action: sts:AssumeRole
 
+      ManagedPolicyArns:
+        # CRITICAL: This now includes ${Environment} to match the Policy Stack's Export
+        - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-S3ReadOnlyPolicyArn"
+
       Tags:
         - Key: Environment
           Value: !Ref Environment
@@ -36,3 +40,7 @@ Resources:
           Value: iam
         - Key: RegionControl
           Value: !Ref RegionControl
+
+Outputs:
+  RoleArn:
+    Value: !GetAtt DeveloperRole.Arn

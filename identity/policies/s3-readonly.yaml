@@ -1,27 +1,29 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: Hardened S3 Policy for Debugging
+Description: S3 Read Only Policy
+
+Parameters:
+  Environment: { Type: String }
+  ProjectName: { Type: String }
 
 Resources:
   S3ReadOnlyPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      # Use a very specific, unique name to avoid collisions
-      ManagedPolicyName: "safe-iac-demo-staging-s3-readonly-v1"
+      ManagedPolicyName: !Sub "${ProjectName}-${Environment}-s3-readonly"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
           - Sid: ListBucket
             Effect: Allow
-            Action:
-              - s3:ListBucket
+            Action: s3:ListBucket
             Resource: arn:aws:s3:::iac-s3-demo-bucket
           - Sid: ObjectAccess
             Effect: Allow
-            Action:
-              - s3:GetObject
+            Action: s3:GetObject
             Resource: arn:aws:s3:::iac-s3-demo-bucket/*
-      Tags:
-        - Key: Environment
-          Value: ent-it-staging
-        - Key: ProjectName
-          Value: safe-iac-demo
+
+Outputs:
+  PolicyArn:
+    Value: !Ref S3ReadOnlyPolicy
+    Export:
+      Name: !Sub "${ProjectName}-${Environment}-S3ReadOnlyPolicyArn"
