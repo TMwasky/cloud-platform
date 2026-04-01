@@ -4,19 +4,16 @@ Description: Developer Role synchronized with Dynamic Policy Export
 Parameters:
   Environment:
     Type: String
-    Default: ent-it-staging
+    Description: "Target environment"
   ProjectName:
     Type: String
-    Default: safe-iac-demo
   RegionControl:
     Type: String
-    Default: us-east-1
 
 Resources:
   DeveloperRole:
     Type: AWS::IAM::Role
     Properties:
-      # Match the naming convention for consistency
       RoleName: !Sub "${ProjectName}-${Environment}-developer-role"
 
       AssumeRolePolicyDocument:
@@ -28,18 +25,11 @@ Resources:
             Action: sts:AssumeRole
 
       ManagedPolicyArns:
-        # CRITICAL: This now includes ${Environment} to match the Policy Stack's Export
         - Fn::ImportValue: !Sub "${ProjectName}-${Environment}-S3ReadOnlyPolicyArn"
 
       Tags:
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: ProjectName
-          Value: !Ref ProjectName
         - Key: AWSService
           Value: iam
-        - Key: RegionControl
-          Value: !Ref RegionControl
 
 Outputs:
   RoleArn:
