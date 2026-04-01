@@ -4,13 +4,11 @@ Description: S3 Read Only Policy
 Parameters:
   Environment:
     Type: String
-    Default: ent-it-staging
+    Description: "Target environment"
   ProjectName:
     Type: String
-    Default: safe-iac-demo
   RegionControl:
     Type: String
-    Default: us-east-1
 
 Resources:
   S3ReadOnlyPolicy:
