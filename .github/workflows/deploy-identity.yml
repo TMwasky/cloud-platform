@@ -38,6 +38,10 @@ jobs:
             --template-file identity/policies/s3-readonly.yaml \
             --stack-name safe-s3-readonly-policy \
             --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides \
+              ProjectName=safe-iac-demo \
+              Environment=ent-it-staging \
+              RegionControl=us-east-1 \
             --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
 
       # Deploy IAM roles CloudFormation
@@ -47,4 +51,8 @@ jobs:
             --template-file identity/roles/developer-role.yaml \
             --stack-name safe-developer-role \
             --capabilities CAPABILITY_NAMED_IAM \
+            --parameter-overrides \
+              ProjectName=safe-iac-demo \
+              Environment=ent-it-staging \
+              RegionControl=us-east-1 \
             --tags Environment=ent-it-staging ProjectName=safe-iac-demo RegionControl=us-east-1 AWSService=cloudformation
