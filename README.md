@@ -62,4 +62,5 @@ If the deployment of an `AWS::IAM::ManagedPolicy` fails during the `CREATE_CHANG
 **Resolution:** Remove the `Tags:` YAML block from the Managed Policy resource. CloudFormation will automatically propagate tags via the `--tags` flag used in the GitHub Actions deployment command.
 
 **Author**
-- **Tonny Mwambingu** <[Mwasky](https://github.com/TMwasky)>
+
+- **Tonny Mwambingu** <[Tonny](https://github.com/TMwasky)>
