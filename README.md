@@ -60,3 +60,6 @@ Direct pushes to the main branch are restricted. To contribute to this infrastru
 If the deployment of an `AWS::IAM::ManagedPolicy` fails during the `CREATE_CHANGESET` phase with `[AWS::EarlyValidation::PropertyValidation] Unsupported property [Tags]`, it is due to strict organizational compliance hooks (e.g., AWS CloudFormation Guard).
 
 **Resolution:** Remove the `Tags:` YAML block from the Managed Policy resource. CloudFormation will automatically propagate tags via the `--tags` flag used in the GitHub Actions deployment command.
+
+**Author**
+- **Tonny Mwambingu** <[Mwasky](https://github.com/TMwasky)>
