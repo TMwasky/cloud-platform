@@ -7,6 +7,8 @@ on:
     paths:
       - "identity/**"
       - "infrastructure/**"
+    paths-ignore:
+      - "README.md"
 
 jobs:
   validate-templates:
