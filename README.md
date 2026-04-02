@@ -63,4 +63,4 @@ If the deployment of an `AWS::IAM::ManagedPolicy` fails during the `CREATE_CHANG
 
 **Author**
 
-- **Tonny Mwambingu** <[Mwasky](https://github.com/TMwasky)>
+- **Tonny Mwambingu** <[Mfirwa](https://github.com/TMwasky)>
