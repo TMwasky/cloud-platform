@@ -4,38 +4,41 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "identity/**"
-      - "infrastructure/**"
-    paths-ignore:
-      - "README.md"
 
 jobs:
   validate-templates:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 1. This action checks which files actually changed
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            cfn_files:
+              - 'identity/**'
+              - 'infrastructure/**'
+
+      # 2. Configure AWS (Only if CFN files changed)
       - name: Configure AWS credentials
+        if: steps.filter.outputs.cfn_files == 'true'
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Validate Policy Stack
+      # 3. Validate Stacks (Only if CFN files changed)
+      - name: Validate CloudFormation
+        if: steps.filter.outputs.cfn_files == 'true'
         run: |
-          aws cloudformation validate-template \
-            --template-body file://identity/policies/s3-readonly.yaml
+          aws cloudformation validate-template --template-body file://identity/policies/s3-readonly.yaml
+          aws cloudformation validate-template --template-body file://identity/roles/developer-role.yaml
+          aws cloudformation validate-template --template-body file://infrastructure/app.yaml
 
-      - name: Validate Identity Stack
-        run: |
-          aws cloudformation validate-template \
-            --template-body file://identity/roles/developer-role.yaml
-
-      - name: Validate Infrastructure Stack
-        run: |
-          aws cloudformation validate-template \
-            --template-body file://infrastructure/app.yaml
+      # 4. Fallback: Always report success if no CFN files changed
+      - name: Skip validation
+        if: steps.filter.outputs.cfn_files == 'false'
+        run: echo "No CloudFormation changes detected. Skipping validation."
